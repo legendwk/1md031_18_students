@@ -1,111 +1,113 @@
 <!DOCTYPE html>
+
 <html lang="en">
-    <head>
-        <title>LET'S GET SOME</title>
-        <meta charset="utf-8"/>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script src="js/js_script.js"></script>
-        <script src="https://vuejs.org/js/vue.js"></script> 
-        <script src="js/vue_script.js"></script>
-    </head>
-    <body>
-        <main>
-            <h1 align=center><span id="explosive"> You in the best burger place in here </span></h1>
-            <div class="header">
-              <img src="../img/hamburgers/background.jpg" id="header-image" alt="header">
-              <h3 id="headertext"> Hope you enjoy your burger</h3>
+
+  <head>
+    <title>LET'S GET IT</title>
+    <meta charset="utf-8" />
+    <link rel="resetsheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script src="/vue/vue.js" defer></script>
+    <script src="js/vue_script.js" defer></script>
+    <link rel="stylesheet" href="css/deli-very.css">
+
+
+  </head>
+
+  <body>
+    <main id='main'>
+      <h1 align=center><span id="explosive"> You in the best burger place in here </span></h1>
+      <div class="header">
+        <h3 id="headertext">LET'S GET SOME BURGERS!</h3>
+        <img src="/img/hamburgers/background.jpg" id="headerpic" alt="header">
+      </div>
+      <div class="wrapper">
+        <div v-for="burger in burgers" class="burgerSelection">
+          {{burger.name}}
+          <img v-bind:src='burger.image'>
+          <ul>
+            <li> {{burger.kCal}} kCal </li>
+            <li v-if="burger.lactose == true">
+              CONTAINS LACTOSE
+            </li>
+            <li v-if="burger.gluten == true">
+              CONTAINS GLUTEN </li>
+            <br>
+            PICK ME, COACH!
+            <input type="checkbox" id="checkbox" v-model="choice" v-bind:value="burger.name">
+          </ul>
+        </div>
+      </div>
+
+      <section id="customer">
+        <h2>Customer information</h2>
+        <p>
+          <label for="fullname">Full name:</label><br>
+          <input type="text" id="fullname" name="name" v-model="fullname" placeholder="Full name">
+        </p>
+        <p>
+          <label for="email">Email:</label><br>
+          <input type="email" id="email" name="email" v-model="email" placeholder="Email">
+        </p>
+
+        <p>Gender:</p>
+        <input type="radio" name="gender" v-model="gender" value="Female"> Female
+        <br>
+        <input type="radio" name="gender" v-model="gender" value="Male"> Male
+        <br>
+        <input type="radio" name="gender" v-model="gender" value="Non-binary"> Non-binary
+        <br>
+        <input type="radio" name="gender" v-model="gender" value="Undisclosed"> Undisclosed
+        <br>
+
+        <p>
+          <label for="payment">Payment option:</label><br>
+          <select id="payment" name="rcp" v-model="payment">
+            <option>Credit card</option>
+            <option>Swish</option>
+            <option>Cash</option>
+            <option>I'm not paying</option>
+          </select>
+        </p>
+
+
+
+
+
+        <h1> Chose your delivery spot! </h1>
+        <a href="/dispatcher" target="_blank">New window</a>
+        <div class="view-box">
+          <div id="dots" v-on:click="showOrder">
+            <div v-bind:style="{ left: display.x + 'px', top: display.y + 'px'}">
+              CRIB
             </div>
-            <section id="section1">
-              <h2> We 'bout to make some burgers</h2>
+          </div>
+        </div>
 
-              <p> Come on in!</p>
+        <div class="orderedItems" v-bind="orderlist">
 
-              <div class="wrapper allergies">
-
-                  <div class="box a">
-                    <h3> The Flaming Burger </h3>
-                    <img src="\img\hamburgers\hamburger1.jpg" alt="A Flaming Burger" title="Flaming Burger" width="300" height="200">
-                      <ul>
-                            <li> Fire</li>
-                            <li> Cheese</li>
-                            <li> Contains <span id="trigger">gluten </span></li>
-                            <li> Contains <span id="trigger">lactose </span></li>
-
-                      </ul>
-                </div>
-                  <div class="box b">
-                    <h3>The Lit Burger</h3>
-                    <img src="\img\hamburgers\hamburger2.jpg" alt="Lit Burger" title="Lit Burger" width="300" height="200">
-                    <ul>
-                        <li> Halloumi</li>
-                        <li> Cheese</li>
-                        <li> Contains <span id="trigger">gluten </span></li>
-                        <li> Contains <span id="trigger">lactos </span></li>
-                    </ul>
-
-                  </div>
-                  <div class="box c">
-                    <h3>The Nice Burger</h3>
-                    <img src="\img\hamburgers\hamburger3.jpg" alt="Nice Burger" title="Nice Burger" width="300" height="200">
-                    <ul>
-                      <li> Gluten <span id="free">free </span></li>
-                      <li> Lactos <span id="free">free </span></li>
-                      <li> Vegetarian</li>
-                      <li> Green</li>
-                    </ul>
-                  </div>
-                </div>
-          </section>
-
-          <section id="section2">
-            <h2> Customer information</h2>
+        </div>
+        <button v-on:click="addOrder"><img src="/img/hamburgers/shannonbig.jpg" width="100" height="100">
+          LFG
+        </button>
+      </section>
+      <section id="checkout">
+        <div>
+          <h3>Your order</h3>
+          <div v-for="burger in choice">{{burger}}</div>
+          <br>
+          <h3>Customer information</h3>
+          Name: {{fullname}} <br>
+          E-mail: {{email}} <br>
+          Gender: {{gender}} <br>
+          Payment method: {{payment}}
+        </div>
 
 
-            <p> This is where you provide necessary information</p>
+      </section>
+    </main>
+  </body>
 
-            <h3> Delivery information</h3>
-
-            <p>
-                <label for="fullname">Full name</label><br>
-                <input type="text" id="fullname" name="fn" required="required" placeholder="First- and last name">
-            </p>
-
-            <p>
-                <label for="email">E-mail</label><br>
-                <input type="email" id="email" name="em" required="required" placeholder="E-mail address">
-            </p>
-
-             <p>
-                <label for="street">Street</label><br>
-                <input type="text" id="street" name="st" required="required" placeholder="Street name">
-            </p>
-
-            <p>
-                <label for="house">House</label><br>
-                <input type="number" id="street" name="st" required="required" placeholder="House number">
-            </p>
-
-
-            <p>
-                <label for="payment">Payment options</label><br>
-                <select id="payment" name="payment">
-                    <option>Swish</option>
-                    <option>Credit card</option>
-                    <option>Paypal</option>
-                    <option>Prepaid card</option>
-                    <option>DIRTY CASH</option>
-                </select>
-            </p>
-
-            <input type="radio" name="gender" value="male"> Male<br>
-            <input type="radio" name="gender" value="female"> Female<br>
-            <input type="radio" name="gender" value="other"> Other<br>
-            <input type="radio" name="gender" value="undisclosed" checked="checked"> Undisclosed<br><br>
-
-          </section>
-
-        <button type="submit"><img src="\img\hamburgers\shannonbig.jpg" height="30" width="40"> LFG</button>
-        </main>
-
-    </body>
 </html>
